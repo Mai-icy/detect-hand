@@ -51,5 +51,5 @@ def pre_cut_color(img, lower, upper):
     if len(contours) == 0:  # 防止没有符合条件的轮廓而报错
         biggest_contour = None
     else:
-        biggest_contour = sorted(contours, key=cv2.contourArea, reverse=True)
+        biggest_contour = sorted(contours, key=cv2.contourArea, reverse=True)[0]
     return black_and_white, biggest_contour

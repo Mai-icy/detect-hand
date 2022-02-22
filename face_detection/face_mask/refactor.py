@@ -6,9 +6,9 @@ import cv2
 import numpy as np
 from keras.applications.imagenet_utils import preprocess_input
 
-import utils.utils as utils
-from net.mobilenet import MobileNet
-from net.mtcnn import Mtcnn
+import face_detection.face_mask.utils.utils as utils
+from face_detection.face_mask.net.mobilenet import MobileNet
+from face_detection.face_mask.net.mtcnn import Mtcnn
 
 
 class FaceMask:
@@ -30,15 +30,15 @@ class FaceMask:
                 self.Crop_WIDTH,
                 3],
             classes=self.NUM_CLASSES)
-        self.mask_model.load_weights(__file__ + "/logs/last_one.h5")
+        self.mask_model.load_weights(__file__[:-11] + "/logs/last_one.h5")
 
     def _load_frame(self, frame):
         """
-        载入图片，并获取它的基本数据到类成员以供处理。必须要在其他处理函数(_judge_face， _judge_masks)之前
+        载入原图片，并获取它的基本数据到类成员以供处理。必须要在其他处理函数(_judge_face， _judge_masks)之前
         :param frame: 原图片
         """
         self.height, self.width, _ = np.shape(frame)
-        self.draw_rgb = cv2.cvtColor(draw, cv2.COLOR_BGR2RGB)
+        self.draw_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     def _judge_face(self, *, is_single=True):
         """
@@ -64,6 +64,7 @@ class FaceMask:
         """
         把获取到的人脸坐标集（rectangles）进行口罩识别，传入要进行判断的rectangles，返回一一对应的True或False列表
         （图片会从类成员中获取，_load_frame会载入图片）
+
         :param rectangles: 由_get_face成员函数返回的数据
         :return: True或False列表
         """
@@ -98,6 +99,7 @@ class FaceMask:
     def _draw_frame(frame, rectangles, judge_res):
         """
         传入结果，进行绘图，并将处理后的图片返回
+
         :param frame: 原图片
         :param rectangles: 由_get_face成员函数返回的数据
         :param judge_res: 由_judge_masks成员函数返回的数据
@@ -116,6 +118,7 @@ class FaceMask:
     def main(self, frame):  # 提供可修改的接口
         """
         集合函数处理图片以及返回结果
+
         :param frame: 传入的图片
         :return: 返回绘画之后的 图片 以及 判断值列表
         """

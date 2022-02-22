@@ -6,14 +6,6 @@ PORT_ID = "COM15"
 
 
 class SerialPort:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance:
-            return cls._instance
-        else:
-            return super().__new__(*args, **kwargs)
-
     def __init__(self, port_id):
         self.ser = serial.Serial()
         self._port_open(port_id)

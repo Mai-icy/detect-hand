@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 import cv2
 import numpy as np
-import utils.utils as utils
+import face_detection.face_mask.utils.utils as utils
 from keras.layers import (Conv2D, Dense, Flatten, Input, MaxPool2D, Permute)
 from keras.layers.advanced_activations import PReLU
 from keras.models import Model
@@ -116,7 +116,7 @@ def create_Onet(weight_path):
 
 class Mtcnn:
     def __init__(self):
-        path = __file__
+        path = __file__[:-8]
         self.Pnet = create_Pnet(path + '../model_data/pnet.h5')
         self.Rnet = create_Rnet(path + '../model_data/rnet.h5')
         self.Onet = create_Onet(path + '../model_data/onet.h5')
